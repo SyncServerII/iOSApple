@@ -62,7 +62,7 @@ public class AppleSignIn: NSObject, GenericSignIn {
 
     public var userIsSignedIn: Bool = false
         
-    override init() {
+    public override init() {
         super.init()
         button.delegate = self
     }
@@ -81,7 +81,7 @@ public class AppleSignIn: NSObject, GenericSignIn {
     }
     
     func completeSignInProcess(autoSignIn:Bool) {
-        // signInOutButton?.buttonShowing = .signOut
+        button.buttonShowing = .signOut
         stickySignIn = true
         delegate?.signInCompleted(self, autoSignIn: autoSignIn)
     }
@@ -103,10 +103,8 @@ public class AppleSignIn: NSObject, GenericSignIn {
     
     private func signUserOut(cancelOnly: Bool) {
         stickySignIn = false
-        
         savedCreds = nil
-        
-        #warning("I want the button to change state here. Not sure if Apple's does that.")
+        button.buttonShowing = .signIn
         
         if cancelOnly {
             delegate?.signInCancelled(self)
@@ -156,7 +154,11 @@ extension AppleSignIn: ASAuthorizationControllerPresentationContextProviding {
 }
 
 extension AppleSignIn: AppleSignInButtonDelegate {
-    func signInTapped(_ button: AppleSignInButton) {
+    func signUserOut(_ button: AppleSignInButton) {
+        signUserOut()
+    }
+    
+    func signInStarted(_ button: AppleSignInButton) {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -165,5 +167,7 @@ extension AppleSignIn: AppleSignInButtonDelegate {
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
+        
+        delegate?.signInStarted(self)
     }
 }

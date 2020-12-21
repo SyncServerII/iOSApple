@@ -26,7 +26,11 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "iOSApple",
-            dependencies: ["iOSSignIn", "ServerShared", "iOSShared"]),
+            dependencies: ["iOSSignIn", "ServerShared", "iOSShared"],
+            resources: [
+                // Do *not* name this folder `Resources`. See https://stackoverflow.com/questions/52421999
+                .copy("Images")
+            ]),
         .testTarget(
             name: "iOSAppleTests",
             dependencies: ["iOSApple"]),

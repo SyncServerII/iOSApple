@@ -15,7 +15,10 @@ struct SavedCredentials: Codable {
     // Apple's unique identifier for the user.
     let userIdentifier: String
     
+    let firstName: String?
+    let lastName: String?
     let fullName: String?
+    
     let email: String?
 }
 
@@ -46,6 +49,6 @@ extension SavedCredentials {
             throw SavedCredentialsError.badIdToken
         }
             
-        return SavedCredentials(authorizationCode: authorizationCodeString, identityToken: idTokenString, userIdentifier: userIdentifier, fullName: fullName, email: email)
+        return SavedCredentials(authorizationCode: authorizationCodeString, identityToken: idTokenString, userIdentifier: userIdentifier, firstName: nameComponents?.givenName, lastName: nameComponents?.familyName, fullName: fullName, email: email)
     }
 }
