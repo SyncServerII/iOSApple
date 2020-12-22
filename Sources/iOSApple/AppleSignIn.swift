@@ -67,11 +67,51 @@ public class AppleSignIn: NSObject, GenericSignIn {
         button.delegate = self
     }
     
+    // Call this periodically.
+    func appleSignInIsAuthorized(completion: @escaping (_ authorized: Bool?)->()) {
+        guard let credentials = credentials else {
+            completion(nil)
+            return
+        }
+        
+        let provider = ASAuthorizationAppleIDProvider()
+        provider.getCredentialState(forUserID: credentials.userId) { state, error in
+            if let error = error {
+                completion(nil)
+                logger.error("getCredentialState: \(error)")
+                return
+            }
+            
+            switch state {
+            case .authorized:
+                // Credentials are valid. Don't do anything.
+                completion(true)
+                
+            case .revoked, .notFound, .transferred:
+                completion(false)
+                logger.warning("User not authorized: \(state); signed out.")
+                
+            @unknown default:
+                completion(nil)
+                logger.warning("Unknown state: \(state)")
+            }
+        }
+    }
+    
     public func appLaunchSetup(userSignedIn: Bool, withLaunchOptions options: [UIApplication.LaunchOptionsKey : Any]?) {
         if userSignedIn {
             if let creds = credentials {
-                delegate?.haveCredentials(self, credentials: creds)
-                completeSignInProcess(autoSignIn: true)
+                appleSignInIsAuthorized() { [weak self] authorized  in
+                    guard let self = self else { return }
+                    
+                    if let authorized = authorized, !authorized {
+                        self.signUserOut()
+                        return
+                    }
+                    
+                    self.delegate?.haveCredentials(self, credentials: creds)
+                    self.completeSignInProcess(autoSignIn: true)
+                }
             }
             else {
                 // Doesn't seem much point in keeping the user with signed-in status if we don't have creds.
