@@ -184,6 +184,7 @@ extension AppleSignIn: ASAuthorizationControllerDelegate {
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         logger.error("\(error)")
+        signUserOut(cancelOnly: true)
     }
 }
 
