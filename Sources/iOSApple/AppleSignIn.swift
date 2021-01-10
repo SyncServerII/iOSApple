@@ -103,16 +103,18 @@ public class AppleSignIn: NSObject, GenericSignIn {
     public func appLaunchSetup(userSignedIn: Bool, withLaunchOptions options: [UIApplication.LaunchOptionsKey : Any]?) {
         if userSignedIn {
             if let creds = credentials {
+                // The `GenericSignIn` contract for `appLaunchSetup` requires no async delay. So do these immediately:
+                self.delegate?.haveCredentials(self, credentials: creds)
+                self.completeSignInProcess(autoSignIn: true)
+                
+                // But also trigger the following.
                 appleSignInIsAuthorized() { [weak self] authorized  in
                     guard let self = self else { return }
-                    
+
                     if let authorized = authorized, !authorized {
                         self.signUserOut()
                         return
                     }
-                    
-                    self.delegate?.haveCredentials(self, credentials: creds)
-                    self.completeSignInProcess(autoSignIn: true)
                 }
             }
             else {
