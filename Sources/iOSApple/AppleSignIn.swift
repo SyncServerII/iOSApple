@@ -60,8 +60,10 @@ public class AppleSignIn: NSObject, GenericSignIn {
     
     public var delegate: GenericSignInDelegate?
 
-    public var userIsSignedIn: Bool = false
-        
+    public var userIsSignedIn: Bool {
+        return stickySignIn
+    }
+            
     public override init() {
         super.init()
         button.delegate = self
