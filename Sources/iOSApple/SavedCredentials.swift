@@ -5,7 +5,7 @@ import iOSSignIn
 
 // Fields from ASAuthorizationAppleIDCredential that we want to save in the keychain once the user is signed in.
 
-struct SavedCredentials: Codable {
+class SavedCredentials: Codable {
     // This is needed by ServerAppleSignInAccount on the server.
     let authorizationCode: String
     
@@ -17,9 +17,19 @@ struct SavedCredentials: Codable {
     
     let firstName: String?
     let lastName: String?
-    let fullName: String?
+    var fullName: String?
     
     let email: String?
+    
+    init(authorizationCode: String, identityToken: String, userIdentifier: String, firstName: String?, lastName: String?, fullName: String?, email: String?) {
+        self.authorizationCode = authorizationCode
+        self.identityToken = identityToken
+        self.userIdentifier = userIdentifier
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.fullName = fullName
+    }
 }
 
 extension SavedCredentials {
@@ -27,6 +37,8 @@ extension SavedCredentials {
         case badAuthorizationCode
         case badIdToken
     }
+    
+    // I'm getting nil username from the apple creds: https://stackoverflow.com/questions/57593070
     
     static func from(appleIDCredential: ASAuthorizationAppleIDCredential) throws -> SavedCredentials {
         let userIdentifier = appleIDCredential.user

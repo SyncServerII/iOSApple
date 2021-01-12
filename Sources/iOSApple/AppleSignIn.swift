@@ -63,6 +63,13 @@ public class AppleSignIn: NSObject, GenericSignIn {
     public var userIsSignedIn: Bool {
         return stickySignIn
     }
+    
+    public func updateUserName(_ fullUserName: String) {
+        if let savedCreds = savedCreds {
+            savedCreds.fullName = fullUserName
+            self.savedCreds = savedCreds
+        }
+    }
             
     public override init() {
         super.init()
