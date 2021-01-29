@@ -16,9 +16,9 @@ let package = Package(
             targets: ["iOSApple"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/SyncServerII/iOSSignIn.git", .branch("master")),
-        .package(url: "https://github.com/SyncServerII/ServerShared.git", .branch("master")),
-        .package(url: "https://github.com/SyncServerII/iOSShared.git", .branch("master")),
+        .package(url: "https://github.com/SyncServerII/iOSSignIn.git", from: "0.0.3"),
+        .package(url: "https://github.com/SyncServerII/ServerShared.git", from: "0.0.4"),
+        .package(url: "https://github.com/SyncServerII/iOSShared.git", from: "0.0.2"),
 
     ],
     targets: [
