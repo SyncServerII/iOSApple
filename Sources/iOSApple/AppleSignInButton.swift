@@ -49,9 +49,7 @@ class AppleSignInButton : UIView {
         signInOutLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
         signInOutContentView.addSubview(signInOutLabel)
         
-        self.buttonShowing = .signIn
-        
-        signInOutContainer.backgroundColor = UIColor.white
+        self.buttonShowing = .signIn        
     }
     
     @objc func signInOutButtonAction() {
@@ -83,6 +81,15 @@ class AppleSignInButton : UIView {
 
         signInOutLabel.frame.origin.x = iconSize * 1.7
         signInOutLabel.centerVerticallyInSuperview()
+        
+        switch traitCollection.userInterfaceStyle {
+        case .dark:
+            signInOutContainer.backgroundColor = UIColor.darkGray
+        case .light, .unspecified:
+            signInOutContainer.backgroundColor = UIColor.white
+        @unknown default:
+            signInOutContainer.backgroundColor = UIColor.white
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
