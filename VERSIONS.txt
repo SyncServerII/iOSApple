@@ -1,4 +1,7 @@
 iOSApple
+
+Version 0.1.1 (4/26/21)
+	* Added debug logging.
 	
 Version 0.1.0 (2/13/21)
 	* Dark mode support.

@@ -60,6 +60,7 @@ public class AppleCredentials : GenericCredentials {
     }
     
     public func refreshCredentials(completion: @escaping (Error?) -> ()) {
+        logger.debug("No credentials refresh for Apple Sign In")
         completion(nil)
     }
 }
