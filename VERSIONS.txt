@@ -1,5 +1,8 @@
 iOSApple
 
+Version 0.1.2 (5/23/21)
+	* Have Sign in with Apple button match recommended style (due to Apple rejection)
+	
 Version 0.1.1 (4/26/21)
 	* Added debug logging.
 	

@@ -32,6 +32,9 @@ class AppleSignInButton : UIView {
     override init(frame: CGRect) {
         super.init(frame: CGRect.zero)
         
+        signInOutContainer.layer.cornerRadius = 3
+        signInOutContainer.layer.masksToBounds = true
+        
         signInOutButton.addTarget(self, action: #selector(signInOutButtonAction), for: .touchUpInside)
         
         addSubview(signInOutContainer)
@@ -39,10 +42,7 @@ class AppleSignInButton : UIView {
         signInOutContainer.addSubview(signInOutContentView)
         signInOutContainer.addSubview(signInOutButton)
 
-        // This is not the Apple provided graphic asset, which had too much space padding around it to look very good.
-        let imageURL = Bundle.module.bundleURL.appendingPathComponent("Images/Black-Logo.png")
-        let iconImage = UIImage(contentsOfFile: imageURL.path)
-        iconView = UIImageView(image: iconImage)
+        iconView = UIImageView(image: iconImage())
         iconView.contentMode = .scaleAspectFit
         signInOutContentView.addSubview(iconView)
         
@@ -50,6 +50,24 @@ class AppleSignInButton : UIView {
         signInOutContentView.addSubview(signInOutLabel)
         
         self.buttonShowing = .signIn        
+    }
+    
+    private func iconImage() -> UIImage? {
+        // These are not the Apple provided graphic assets, which had too much space padding around it to look very good.
+        
+        let imageName: String
+        
+        switch traitCollection.userInterfaceStyle {
+        case .dark:
+            imageName = "Images/Black-Logo.png"
+        case .light, .unspecified:
+            imageName = "Images/White-Logo.png"
+        @unknown default:
+            imageName = "Images/White-Logo.png"
+        }
+        
+        let imageURL = Bundle.module.bundleURL.appendingPathComponent(imageName)
+        return UIImage(contentsOfFile: imageURL.path)
     }
     
     @objc func signInOutButtonAction() {
@@ -82,14 +100,25 @@ class AppleSignInButton : UIView {
         signInOutLabel.frame.origin.x = iconSize * 1.7
         signInOutLabel.centerVerticallyInSuperview()
         
+        iconView?.image = iconImage()
+        
+        let backgroundColor: UIColor
+        let textColor: UIColor
+        
         switch traitCollection.userInterfaceStyle {
         case .dark:
-            signInOutContainer.backgroundColor = UIColor.darkGray
+            backgroundColor = .white
+            textColor = .black
         case .light, .unspecified:
-            signInOutContainer.backgroundColor = UIColor.white
+            backgroundColor = .black
+            textColor = .white
         @unknown default:
-            signInOutContainer.backgroundColor = UIColor.white
+            backgroundColor = .white
+            textColor = .black
         }
+        
+        signInOutContainer.backgroundColor = backgroundColor
+        signInOutLabel.textColor = textColor
     }
     
     required public init?(coder aDecoder: NSCoder) {
