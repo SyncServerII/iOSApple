@@ -43,6 +43,10 @@ public class AppleCredentials : GenericCredentials {
         return result
     }
     
+    public var emailAddress: String! {
+        return savedCreds.email
+    }
+
     public var userId: String {
         return savedCreds.userIdentifier
     }

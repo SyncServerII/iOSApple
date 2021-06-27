@@ -1,5 +1,8 @@
 iOSApple
 
+Version 0.2.0 (6/26/21)
+	* Added email address to credentials.
+    
 Version 0.1.2 (5/23/21)
 	* Have Sign in with Apple button match recommended style (due to Apple rejection)
 	
